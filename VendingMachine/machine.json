@@ -1,0 +1,46 @@
+{
+  "Machine": {
+    "VmWallet": {
+      "Currency": "Рубль",
+      "Coins": [
+        {
+          "Value": 1,
+          "Amount": 100
+        },
+        {
+          "Value": 2,
+          "Amount": 100
+        },
+        {
+          "Value": 5,
+          "Amount": 100
+        },
+        {
+          "Value": 10,
+          "Amount": 100
+        }
+      ]
+    },
+    "ClientWallet": {
+      "Currency": "Рубль",
+      "Coins": [
+        {
+          "Value": 1,
+          "Amount": 10
+        },
+        {
+          "Value": 2,
+          "Amount": 30
+        },
+        {
+          "Value": 5,
+          "Amount": 20
+        },
+        {
+          "Value": 10,
+          "Amount": 15
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,56 @@
+﻿@model Wallet
+
+@{
+    char coinSign = Model.Currency.ToLower()[0];
+}
+
+<div class="card mb-2">
+    <h5 class="card-header">@Html.DisplayNameForModel()</h5>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>@Html.DisplayNameFor(m => m.Coins.FirstOrDefault().Value)</th>
+                    <th>@Html.DisplayNameFor(m => m.Coins.FirstOrDefault().Amount)</th>
+                    @if (Model is ClientWallet)
+                    {
+                        <th></th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var coin in Model.Coins)
+                {
+                    <tr>
+                        <td>@coin.Value @coinSign.</td>
+                        <td>@coin.Amount</td>
+                        @if (Model is ClientWallet)
+                        {
+                            <td>
+                                <a asp-controller="Machine" asp-action="Deposit" asp-route-coin="@coin.Value"
+                           class="btn btn-outline-primary btn-sm @(coin.Amount == 0 ? "disabled" : "")">
+                                    Внести
+                                </a>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @if (Model is VmWallet)
+        {
+            <p>
+                @{
+                    var vmWallet = Model as VmWallet;
+                }
+
+                @Html.DisplayNameFor(m => vmWallet.Deposit): @vmWallet.Deposit @coinSign.
+                <a asp-controller="Machine" asp-action="Refund" asp-route-sum="@vmWallet.Deposit"
+               class="btn btn-outline-dark btn-sm">
+                    Возврат
+                </a>
+            </p>
+        }
+    </div>
+</div>

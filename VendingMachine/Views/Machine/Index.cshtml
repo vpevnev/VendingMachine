@@ -1,0 +1,78 @@
+﻿@model Machine
+@{
+    ViewData["Title"] = @Html.DisplayNameForModel();
+}
+
+<div class="w-50 mx-auto">
+    <h1>@ViewData["Title"]</h1>
+
+    <div class="card mb-2">
+        <h5 class="card-header">@Html.DisplayNameFor(m => m.Menu)</h5>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th>@Html.DisplayNameFor(m => m.Menu.FirstOrDefault().Name)</th>
+                        <th>@Html.DisplayNameFor(m => m.Menu.FirstOrDefault().Cost)</th>
+                        <th>@Html.DisplayNameFor(m => m.Menu.FirstOrDefault().Amount)</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.Menu)
+                    {
+                        <tr>
+                            <td>@product.Name</td>
+                            <td class="product-cost">@product.Cost</td>
+                            <td>@product.Amount</td>
+                            <td>
+                                <button type="button" class="btn btn-outline-success btn-sm buy-button"
+                                    value="@product.Id" @(product.Amount == 0 ? "disabled" : "")>
+                                    Купить
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    @await Html.PartialAsync("_Wallet", Model.VmWallet)
+    @await Html.PartialAsync("_Wallet", Model.ClientWallet)
+</div>
+
+@section Scripts
+{
+<script>
+    $('.buy-button').click(function () {
+        let row = $(this).closest("tr");
+        let cost = row.find(".product-cost").html();
+
+        let deposit = @Model.VmWallet.Deposit;
+
+        if (cost > deposit)
+        {
+            alert('Недостаточно средств!')
+            return;
+        }
+
+        let productId = $(this).val();
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Content("~/Machine/Buy")',
+            data: {
+                sum: deposit,
+                productId: productId
+            },
+            success: function (result) {
+                alert('Спасибо за покупку!');
+            },
+            complete: function (){
+                document.location.reload(true);
+            }
+        });
+    });
+</script>
+}
